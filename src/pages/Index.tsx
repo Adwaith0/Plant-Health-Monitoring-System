@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Plus, Bell, Leaf } from 'lucide-react';
+import { Plus, Bell, Leaf, Settings as SettingsIcon, AlertCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Plant, Notification } from '@/types/plant';
 import { PlantCard } from '@/components/PlantCard';
 import { AddPlantModal } from '@/components/AddPlantModal';
@@ -283,19 +284,31 @@ const Index = () => {
               </div>
             </div>
             
-            <Button
-              variant="ghost"
-              size="icon"
-              className="relative"
-              onClick={() => setNotificationPanelOpen(true)}
-            >
-              <Bell className="w-5 h-5" />
-              {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-danger text-white text-xs rounded-full flex items-center justify-center animate-pulse-soft">
-                  {unreadCount}
-                </span>
-              )}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Link to="/alerts">
+                <Button variant="ghost" size="icon">
+                  <AlertCircle className="w-5 h-5" />
+                </Button>
+              </Link>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative"
+                onClick={() => setNotificationPanelOpen(true)}
+              >
+                <Bell className="w-5 h-5" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-danger text-white text-xs rounded-full flex items-center justify-center animate-pulse-soft">
+                    {unreadCount}
+                  </span>
+                )}
+              </Button>
+              <Link to="/settings">
+                <Button variant="ghost" size="icon">
+                  <SettingsIcon className="w-5 h-5" />
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </header>
