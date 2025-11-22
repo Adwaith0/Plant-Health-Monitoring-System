@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bell, Moon, Sun, Mail, Smartphone, Globe, Save, RefreshCw, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,15 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 
 const Settings = () => {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem("appSettings");
+    if (saved) {
+      const settings = JSON.parse(saved);
+      return settings.theme || "light";
+    }
+    return "light";
+  });
+  
   const [notifications, setNotifications] = useState({
     email: true,
     push: false,
@@ -23,6 +31,47 @@ const Settings = () => {
     moistureThreshold: 30,
     autoWatering: false,
   });
+
+  // Load settings on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("appSettings");
+    if (saved) {
+      const settings = JSON.parse(saved);
+      if (settings.theme) setTheme(settings.theme);
+      if (settings.notifications) setNotifications(settings.notifications);
+      if (settings.preferences) setPreferences(settings.preferences);
+    }
+  }, []);
+
+  // Apply theme changes immediately
+  useEffect(() => {
+    const root = document.documentElement;
+    
+    if (theme === "dark") {
+      root.classList.add("dark");
+    } else if (theme === "light") {
+      root.classList.remove("dark");
+    } else if (theme === "auto") {
+      // Auto mode: use system preference
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        root.classList.add("dark");
+      } else {
+        root.classList.remove("dark");
+      }
+    }
+  }, [theme]);
+
+  const handleThemeChange = (newTheme: string) => {
+    setTheme(newTheme);
+    // Save immediately when theme changes
+    const currentSettings = {
+      theme: newTheme,
+      notifications,
+      preferences
+    };
+    localStorage.setItem("appSettings", JSON.stringify(currentSettings));
+    toast.success(`Theme changed to ${newTheme}`);
+  };
 
   const handleSaveSettings = () => {
     localStorage.setItem("appSettings", JSON.stringify({ theme, notifications, preferences }));
@@ -38,11 +87,13 @@ const Settings = () => {
       moistureThreshold: 30,
       autoWatering: false,
     });
+    document.documentElement.classList.remove("dark");
+    localStorage.removeItem("appSettings");
     toast.info("Settings reset to defaults");
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 p-6">
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="flex items-center gap-4 mb-4">
           <Link to="/">
@@ -54,8 +105,8 @@ const Settings = () => {
         </div>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
-            <p className="text-gray-600 mt-1">Manage your application preferences</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Settings</h1>
+            <p className="text-gray-600 dark:text-gray-300 mt-1">Manage your application preferences</p>
           </div>
           <div className="flex gap-2">
             <Button variant="outline" onClick={handleResetSettings}>
@@ -84,7 +135,7 @@ const Settings = () => {
                 <Label htmlFor="theme">Theme</Label>
                 <p className="text-sm text-gray-500">Select your preferred theme</p>
               </div>
-              <Select value={theme} onValueChange={setTheme}>
+              <Select value={theme} onValueChange={handleThemeChange}>
                 <SelectTrigger className="w-32">
                   <SelectValue />
                 </SelectTrigger>

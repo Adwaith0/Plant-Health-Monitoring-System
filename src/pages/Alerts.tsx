@@ -151,7 +151,7 @@ const Alerts = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 p-6">
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center gap-4 mb-4">
           <Link to="/">
@@ -163,8 +163,8 @@ const Alerts = () => {
         </div>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Alerts</h1>
-            <p className="text-gray-600 mt-1">Monitor and manage plant care alerts</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Alerts</h1>
+            <p className="text-gray-600 dark:text-gray-300 mt-1">Monitor and manage plant care alerts</p>
           </div>
           <div className="flex gap-2">
             <Select value={filterType} onValueChange={setFilterType}>
