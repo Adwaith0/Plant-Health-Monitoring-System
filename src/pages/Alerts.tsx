@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { AlertCircle, Droplet, Thermometer, Sun, CheckCircle, X, Filter, Trash2, ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
+import { AlertCircle, Droplet, Thermometer, Sun, CheckCircle, X, Filter, Trash2 } from "lucide-react";
+import { Navigation } from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -151,16 +151,10 @@ const Alerts = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 p-6">
-      <div className="max-w-6xl mx-auto space-y-6">
-        <div className="flex items-center gap-4 mb-4">
-          <Link to="/">
-            <Button variant="ghost" size="icon">
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-          </Link>
-          <div className="flex-1" />
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
+      <Navigation />
+      <div className="container mx-auto px-4 py-6">
+        <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Alerts</h1>
@@ -337,6 +331,7 @@ const Alerts = () => {
             )}
           </TabsContent>
         </Tabs>
+        </div>
       </div>
     </div>
   );

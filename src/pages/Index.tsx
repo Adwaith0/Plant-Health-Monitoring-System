@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Plus, Bell, Leaf, Settings as SettingsIcon, AlertCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Plus, Leaf } from 'lucide-react';
 import { Plant, Notification } from '@/types/plant';
 import { PlantCard } from '@/components/PlantCard';
 import { AddPlantModal } from '@/components/AddPlantModal';
 import { PlantDetailsModal } from '@/components/PlantDetailsModal';
 import { NotificationPanel } from '@/components/NotificationPanel';
+import { Navigation } from '@/components/Navigation';
 import { loadPlants, savePlants, loadNotifications, saveNotifications } from '@/utils/plantStorage';
 import { simulateSensorUpdate, getPlantStatus } from '@/utils/sensorSimulation';
 import { useToast } from '@/hooks/use-toast';
-import logo from '@/assets/logo.png';
 import plant1 from '@/assets/plant1.jpg';
 import plant2 from '@/assets/plant2.jpg';
 import plant3 from '@/assets/plant3.jpg';
@@ -272,46 +271,10 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-10 bg-card border-b shadow-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <img src={logo} alt="Logo" className="w-10 h-10" />
-              <div>
-                <h1 className="text-xl font-bold text-foreground">Connected Plant Care</h1>
-                <p className="text-xs text-muted-foreground">Smart monitoring system</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <Link to="/alerts">
-                <Button variant="ghost" size="icon">
-                  <AlertCircle className="w-5 h-5" />
-                </Button>
-              </Link>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="relative"
-                onClick={() => setNotificationPanelOpen(true)}
-              >
-                <Bell className="w-5 h-5" />
-                {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-danger text-white text-xs rounded-full flex items-center justify-center animate-pulse-soft">
-                    {unreadCount}
-                  </span>
-                )}
-              </Button>
-              <Link to="/settings">
-                <Button variant="ghost" size="icon">
-                  <SettingsIcon className="w-5 h-5" />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navigation 
+        unreadCount={unreadCount} 
+        onNotificationClick={() => setNotificationPanelOpen(true)} 
+      />
 
       {/* Main content */}
       <main className="container mx-auto px-4 py-8">
